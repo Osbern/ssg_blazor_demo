@@ -1,0 +1,31 @@
+﻿@inject HttpClient Http
+
+<h1>Blog Posts</h1>
+
+@if (posts == null)
+{
+    <div class="spinner-grow text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+}
+else
+{
+    @foreach (var p in posts)
+    {
+        <div class="alert alert-secondary mt-4" role="alert">
+            <h3>@p.Title</h3>
+            <p>@p.Body</p>
+
+            <Comments Id="@p.Id" />
+        </div>
+    }
+}
+
+@functions {
+    PostModel[] posts;
+
+    protected override async Task OnInitAsync()
+    {
+        posts = await Http.GetJsonAsync<PostModel[]>("https://jsonplaceholder.typicode.com/posts");
+    }
+}

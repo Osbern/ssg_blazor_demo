@@ -1,0 +1,47 @@
+@inject HttpClient Http
+
+@if (comments == null)
+{
+    @if (clicked)
+    {
+        <div class="spinner-grow text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    }
+    else
+    {
+        <button class="btn btn-primary" onclick="@ShowComments">Show Comments</button>
+    }
+}
+else
+{
+    <button class="btn btn-primary" style="margin-bottom: 10px;" onclick="@HideComments">Hide Comments</button>
+    @foreach (var c in comments)
+    {
+        <div class="alert alert-light" role="alert">
+            <h5>@c.Name</h5>
+            <h6><em>-- @c.Email</em></h6>
+            <p>@c.Body</p>
+        </div>
+    }
+}
+
+@functions {
+    [Parameter] 
+    int Id { get; set; }
+
+    bool clicked;
+    CommentModel[] comments;
+
+    public async Task ShowComments(UIMouseEventArgs e)
+    {
+        clicked = true;
+        comments = await Http.GetJsonAsync<CommentModel[]>("https://jsonplaceholder.typicode.com/comments?postId=1" + Id);
+        clicked = false;
+    }
+
+    public void HideComments(UIMouseEventArgs e)
+    {
+        comments = null;
+    }
+}
