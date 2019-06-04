@@ -1,0 +1,7 @@
+# Bin
+*.dll
+bin
+obj
+
+# VS Code
+.vscode
